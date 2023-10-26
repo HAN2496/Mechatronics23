@@ -82,32 +82,31 @@ int main(void){
     int for_scan;
 
     for(int i = 0; i<total_num; i++){
-	printf("%d trial target :", i+1);
-	scanf("%d", &for_scan);
-	trial_nth[i] = for_scan;
+        printf("%d trial target :", i+1);
+        scanf("%d", &for_scan);
+        trial_nth[i] = for_scan;
     }
-
 
     while(1){
 	if(current_trial>-1){
 	    checkTime = millis();
 	    if(checkTime - checkTimeBefore > LOOPTIME){
-		if (errorPosition > 0){
-		    softPwmWrite(MOTOR1, control());
-		    softPwmWrite(MOTOR2, 0);
-		} else {
-		    softPwmWrite(MOTOR2, -1 * control());
-		    softPwmWrite(MOTOR1, 0);
-		}
-		checkTimeBefore = checkTime;
-		total_error += LOOPTIME * fabs(errorPosition) * (checkTime - pulse_time);
+            if(errorPosition > 0){
+                softPwmWrite(MOTOR1, control());
+                softPwmWrite(MOTOR2, 0);
+            } else{
+                softPwmWrite(MOTOR2, -1 * control());
+                softPwmWrite(MOTOR1, 0);
+            }
+            checkTimeBefore = checkTime;
+            total_error += LOOPTIME * fabs(errorPosition) * (checkTime - pulse_time);
 	    }
 
 	    if(current_trial == total_num){
-		softPwmWrite(MOTOR1, 0);
-		softPwmWrite(MOTOR2, 0);
-		printf("%.5f", total_error);
-		break;
+            softPwmWrite(MOTOR1, 0);
+            softPwmWrite(MOTOR2, 0);
+            printf("%.5f", total_error);
+            break;
 	    }
 	}
     }

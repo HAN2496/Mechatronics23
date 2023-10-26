@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include <wiringPi.h>
 #include <softPwm.h>
@@ -15,14 +16,11 @@
 #define ENCODERB 6 // blue
 #define PULSEINPUT 21
 
-float pgain = 500;
-float igain = 1;
-float dgain = 10;
-float t = 0.01;
+#define TESTS_PER_GAIN 10
+#define GAIN_INCREMENT 0.5
 
-float g1;
-float g2;
-float g3;
+
+float t = 0.01;
 
 int encA;
 int encB;
@@ -62,11 +60,15 @@ int main(void){
     softPwmCreate(MOTOR2, 0, 100);
 
     wiringPiISR(ENCODERA, INT_EDGE_BOTH, funcEncoderA);
-    wiringPiISR(ENCODERB, INT_EDGE_BOTH, funcEncoderB);
+    wiringPiISR(ENCODERB, INT_EDGE_BOTH, funcEncoderB); 
 
-    g1 = pgain + igain * t + dgain / t;
-    g2 = -1 * (pgain + 2 * dgain / t);
-    g3 = dgain / t;
+    float pgain = 500;
+    float igain = 1;
+    float dgain = 10;
+
+    float g1 = pgain + igain * t + dgain / t;
+    float g2 = -1 * (pgain + 2 * dgain / t);
+    float g3 = dgain / t;
 
     softPwmWrite(MOTOR1, 0);
     softPwmWrite(MOTOR2, 0);
@@ -84,10 +86,10 @@ int main(void){
         virtual_pulse();
         if(checkTime - checkTimeBefore > LOOPTIME){
             if (errorPosition > 0){
-                softPwmWrite(MOTOR1, control());
+                softPwmWrite(MOTOR1, - control(g1, g2, g3));
                 softPwmWrite(MOTOR2, 0);
             } else {
-                softPwmWrite(MOTOR2, -1 * control());
+                softPwmWrite(MOTOR2, control(g1, g2, g3));
                 softPwmWrite(MOTOR1, 0);
             }
             checkTimeBefore = checkTime;
@@ -103,7 +105,7 @@ int main(void){
     return 0;
 }
 
-float control(){
+float control(float g1, float g2, float g3){
     e = errorPosition;
     m = m1 + g1 * e + g2 * e1 + g3 * e2;
     e2 = e1;
@@ -142,15 +144,13 @@ void funcEncoderB(){
 }
 
 void virtual_pulse(){
-    if(millis() - pulse_time>500){
-		current_trial++;
+    current_trial++;
 
-		referencePosition  = -trial_nth[current_trial];
-		errorPosition = referencePosition - redGearPosition;
+    referencePosition  = trial_nth[current_trial];
+    errorPosition = referencePosition - redGearPosition;
 
-		checkTimeBefore = millis();
-		checkTime = millis();
-		pulse_time = millis();
-    }
+    checkTimeBefore = millis();
+    checkTime = millis();
+    pulse_time = millis();
 
 }
