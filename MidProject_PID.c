@@ -16,7 +16,6 @@
 #define ENCODERB 6 // blue
 #define PULSEINPUT 21
 
-#define TESTS_PER_GAIN 10
 #define GAIN_INCREMENT 0.5
 
 
@@ -50,6 +49,42 @@ int current_num = 0;
 float total_error = 0;
 int pulse_time = 0;
 
+typedef struct {
+    float pgain, igain, dgain;
+    float total_error;
+} PIDResult;
+
+void saveResultsToCSV(PIDResult results[], int size, const char* filename) {
+    FILE *file = fopen(filename, "w");
+    if (file == NULL) {
+        printf("Error in Saving Data.\n");
+        return;
+    }
+    fprintf(file, "P Gain, I Gain, D Gain, Total Error\n");
+    for (int i = 0; i < size; i++) {
+        fprintf(file, "%.2f, %.2f, %.2f, %.5f\n", 
+                results[i].pgain, results[i].igain, results[i].dgain, 
+                results[i].total_error);
+    }
+    fclose(file);
+}
+
+/*
+1.수정할 것
+ 1) igain test인 경우 main함수의 while(pgain<1000)을 igain으로 변경
+ 2) 그리고 파일 저장명 변경
+
+2. GAIN_INCREMENT
+ - 실험시 gain값 얼마씩 증가시킬지 (위의 define문에 정의 되어 있음)
+ - gain별로 아마 그 값을 다르게 설정해야할 것임. 
+    - i, d는 낮은 값에서 잘 될것이니 수정하면 됨.
+
+3. 주의사항
+ - 변수들이 새로운 test 전에 잘 초기화 되고있는지 확인할 것.
+   (ex. total_error, checkTime등에 오류가 발생할 수 있음.)
+
+*/
+
 int main(void){
     wiringPiSetupGpio();
     pinMode(ENCODERA, INPUT);
@@ -62,9 +97,12 @@ int main(void){
     wiringPiISR(ENCODERA, INT_EDGE_BOTH, funcEncoderA);
     wiringPiISR(ENCODERB, INT_EDGE_BOTH, funcEncoderB); 
 
-    float pgain = 500;
+    PIDResult results[TESTS_PER_GAIN * 3];
+    int resultCount = 0;
+
+    float pgain = 0;
     float igain = 1;
-    float dgain = 10;
+    float dgain = 1;
 
     float g1 = pgain + igain * t + dgain / t;
     float g2 = -1 * (pgain + 2 * dgain / t);
@@ -81,27 +119,35 @@ int main(void){
         target_arr[i] = rand() % 16 - 8;
     }
 
-    while(1){
-        checkTime = millis();
-        virtual_pulse();
-        if(checkTime - checkTimeBefore > LOOPTIME){
-            if (errorPosition > 0){
-                softPwmWrite(MOTOR1, - control(g1, g2, g3));
-                softPwmWrite(MOTOR2, 0);
-            } else {
-                softPwmWrite(MOTOR2, control(g1, g2, g3));
-                softPwmWrite(MOTOR1, 0);
+    while(pgain<1000){
+        while(1){
+            checkTime = millis();
+            virtual_pulse();
+            if(checkTime - checkTimeBefore > LOOPTIME){
+                if (errorPosition > 0){
+                    softPwmWrite(MOTOR1, - control(g1, g2, g3));
+                    softPwmWrite(MOTOR2, 0);
+                } else {
+                    softPwmWrite(MOTOR2, control(g1, g2, g3));
+                    softPwmWrite(MOTOR1, 0);
+                }
+                checkTimeBefore = checkTime;
+                total_error += LOOPTIME * fabs(errorPosition) * (checkTime - pulse_time);
             }
-            checkTimeBefore = checkTime;
-            total_error += LOOPTIME * fabs(errorPosition) * (checkTime - pulse_time);
+            if(current_num == total_num){
+                softPwmWrite(MOTOR1, 0);
+                softPwmWrite(MOTOR2, 0);
+                printf("%.5f", total_error);
+                break;
+            }
         }
-        if(current_num == total_num){
-            softPwmWrite(MOTOR1, 0);
-            softPwmWrite(MOTOR2, 0);
-            printf("%.5f", total_error);
-            break;
-        }
+        results[resultCount++] = (PIDResult){pgain, igain, dgain, total_error};
+        pgain = pgain + GAIN_INCREMENT
+        total_error = 0
+        checkTime = millis()
+        checkTimeBefore = millis()
     }
+    saveResultsToCSV(results, resultCount, "PTest_reuslt.csv");
     return 0;
 }
 
