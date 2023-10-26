@@ -71,7 +71,7 @@ int main(void){
 
     softPwmWrite(MOTOR1, 0);
     softPwmWrite(MOTOR2, 0);
-    delay(1000);
+    delay(500);
     
     printf("P, I, D = %.2f, %.2f, %.2f\n", pgain, igain, dgain);
 

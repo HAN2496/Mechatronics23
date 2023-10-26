@@ -45,9 +45,9 @@ void funcEncoderA();
 void funcEncoderB();
 void pulse_catch();
 
-int total_num;
-int trial_nth[10] = {};
-int current_trial = -1;
+int total_num = 0;
+int target_arr[10] = {};
+int current_num = 0;
 
 float total_error = 0;
 int pulse_time = 0;
@@ -63,7 +63,6 @@ int main(void){
 
     wiringPiISR(ENCODERA, INT_EDGE_BOTH, funcEncoderA);
     wiringPiISR(ENCODERB, INT_EDGE_BOTH, funcEncoderB);
-    wiringPiISR(PULSEINPUT, INT_EDGE_RISING, pulse_catch);
 
     g1 = pgain + igain * t + dgain / t;
     g2 = -1 * (pgain + 2 * dgain / t);
@@ -75,41 +74,31 @@ int main(void){
     
     printf("P, I, D = %.2f, %.2f, %.2f\n", pgain, igain, dgain);
 
-    printf("Enter Total Trial Number: ");
-    scanf("%d", &total_num);
-    printf("\n");
-
-    int for_scan;
-
-    for(int i = 0; i<total_num; i++){
-	printf("%d trial target :", i+1);
-	scanf("%d", &for_scan);
-	trial_nth[i] = for_scan;
+    int total_num = rand() % 6 + 5;
+    for(int i = 0; i < total_num; i++){
+        target_arr[i] = rand() % 16 - 8;
     }
 
-
     while(1){
-	if(current_trial>-1){
-	    checkTime = millis();
-	    if(checkTime - checkTimeBefore > LOOPTIME){
-		if (errorPosition > 0){
-		    softPwmWrite(MOTOR1, control());
-		    softPwmWrite(MOTOR2, 0);
-		} else {
-		    softPwmWrite(MOTOR2, -1 * control());
-		    softPwmWrite(MOTOR1, 0);
-		}
-		checkTimeBefore = checkTime;
-		total_error += LOOPTIME * fabs(errorPosition) * (checkTime - pulse_time);
-	    }
-
-	    if(current_trial == total_num){
-		softPwmWrite(MOTOR1, 0);
-		softPwmWrite(MOTOR2, 0);
-		printf("%.5f", total_error);
-		break;
-	    }
-	}
+        checkTime = millis();
+        virtual_pulse();
+        if(checkTime - checkTimeBefore > LOOPTIME){
+            if (errorPosition > 0){
+                softPwmWrite(MOTOR1, control());
+                softPwmWrite(MOTOR2, 0);
+            } else {
+                softPwmWrite(MOTOR2, -1 * control());
+                softPwmWrite(MOTOR1, 0);
+            }
+            checkTimeBefore = checkTime;
+            total_error += LOOPTIME * fabs(errorPosition) * (checkTime - pulse_time);
+        }
+        if(current_num == total_num){
+            softPwmWrite(MOTOR1, 0);
+            softPwmWrite(MOTOR2, 0);
+            printf("%.5f", total_error);
+            break;
+        }
     }
     return 0;
 }
@@ -152,10 +141,8 @@ void funcEncoderB(){
     errorPosition = referencePosition - redGearPosition;
 }
 
-void pulse_catch(){
+void virtual_pulse(){
     if(millis() - pulse_time>500){
-		printf("******\n");
-		printf("PULSE\n");
 		current_trial++;
 
 		referencePosition  = -trial_nth[current_trial];
@@ -167,4 +154,3 @@ void pulse_catch(){
     }
 
 }
-
