@@ -47,6 +47,7 @@ int target_arr[10] = {};
 int current_num = 0;
 
 float total_error = 0;
+float min_error = 0;
 int pulse_time = 0;
 
 typedef struct {
@@ -119,7 +120,14 @@ int main(void){
         target_arr[i] = rand() % 16 - 8;
     }
 
+    for(int i=0; i<tota_num-1; i++){
+        min_error = min_error + (target_arr[i+1] - target_arr[i]) * (target_arr[i+1] - target_arr[i] / 6.25)
+    }
+
+    printf("Start\n");
+
     while(pgain<1000){
+        printf("New Gain Start\n")
         while(1){
             checkTime = millis();
             virtual_pulse();
