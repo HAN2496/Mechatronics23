@@ -46,7 +46,7 @@ unsigned int checkTimeBefore;
 float control();
 void funcEncoderA();
 void funcEncoderB();
-void pulse_catch();
+void virtual_pulse();
 
 int total_num = 0;
 int target_arr[10] = {};
@@ -107,7 +107,7 @@ int main(void) {
     PIDResult results[TESTS_PER_GAIN * 3];
     int resultCount = 0;
 
-    float pgain = 0;
+    float pgain = 1;
     float igain = 1;
     float dgain = 1;
 
@@ -134,7 +134,7 @@ int main(void) {
 
     while (pgain < 1000) {
         printf("New Gain Start\n");
-        int current_num = 0;
+        current_num = 0;
         while (1) {
             checkTime = millis();
             virtual_pulse();
@@ -163,11 +163,11 @@ int main(void) {
         checkTime = millis();
         checkTimeBefore = millis();
     }
-    saveResultsToCSV(results, resultCount, "PTest_reuslt.csv");
+    saveResultsToCSV(results, resultCount, "PTest_result.csv");
     return 0;
 }
 
-float control(float g1, float g2, float g3) {
+float control() {
     e = errorPosition;
     m = m1 + g1 * e + g2 * e1 + g3 * e2;
     e2 = e1;
@@ -214,8 +214,7 @@ void virtual_pulse() {
     errorPosition = referencePosition - redGearPosition;
 
     checkTimeBefore = millis();
-    checkTime = millis();
     pulse_time = millis();
 
 }
-//aaa
+//aaaaa
