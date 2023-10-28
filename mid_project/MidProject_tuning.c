@@ -46,7 +46,7 @@ unsigned int checkTimeBefore;
 float control();
 void funcEncoderA();
 void funcEncoderB();
-void virtual_pulse();
+void virtual_pulse(int i);
 
 int total_num = 0;
 int target_arr[10] = {};
@@ -55,6 +55,7 @@ int current_num = 0;
 float total_error = 0;
 float min_error = 0;
 int pulse_time = 0;
+float pulseInterval = 500;
 
 typedef struct {
     float pgain, igain, dgain;
@@ -76,27 +77,10 @@ void saveResultsToCSV(PIDResult results[], int size, const char* filename) {
     fclose(file);
 }
 
-/*
-1.수정할 것
- 1) igain test인 경우 main함수의 while(pgain<1000)을 igain으로 변경
- 2) 그리고 파일 저장명 변경
-
-2. GAIN_INCREMENT
- - 실험시 gain값 얼마씩 증가시킬지 (위의 define문에 정의 되어 있음)
- - gain별로 아마 그 값을 다르게 설정해야할 것임.
-    - i, d는 낮은 값에서 잘 될것이니 수정하면 됨.
-
-3. 주의사항
- - 변수들이 새로운 test 전에 잘 초기화 되고있는지 확인할 것.
-   (ex. total_error, checkTime등에 오류가 발생할 수 있음.)
-
-*/
-
 int main(void) {
     wiringPiSetupGpio();
     pinMode(ENCODERA, INPUT);
     pinMode(ENCODERB, INPUT);
-    pinMode(PULSEINPUT, INPUT);
 
     softPwmCreate(MOTOR1, 0, 100);
     softPwmCreate(MOTOR2, 0, 100);
@@ -110,6 +94,8 @@ int main(void) {
     float pgain = 1;
     float igain = 1;
     float dgain = 1;
+    
+    float lastTime = millis();
 
     float g1 = pgain + igain * t + dgain / t;
     float g2 = -1 * (pgain + 2 * dgain / t);
@@ -124,7 +110,9 @@ int main(void) {
     int total_num = rand() % 6 + 5;
     for (int i = 0; i < total_num; i++) {
         target_arr[i] = rand() % 16 - 8;
+        printf("%d ", target_arr[i]);
     }
+    printf("\n");
 
     for (int i = 0; i < total_num - 1; i++) {
         min_error = min_error + (target_arr[i + 1] - target_arr[i]) * (target_arr[i + 1] - target_arr[i] / 6.25);
@@ -134,10 +122,11 @@ int main(void) {
 
     while (pgain < 1000) {
         printf("New Gain Start\n");
-        current_num = 0;
-        while (1) {
+        for (int i=0; i<total_num; i++){
+        virtual_pulse(i);
+        while (checkTime - lastTime <= pulseInterval) {
+            printf("%d, %.3f, %.3f\n", checkTime, lastTime, pulseInterval);
             checkTime = millis();
-            virtual_pulse();
             if (checkTime - checkTimeBefore > LOOPTIME) {
                 if (errorPosition > 0) {
                     softPwmWrite(MOTOR1, -control(g1, g2, g3));
@@ -150,18 +139,21 @@ int main(void) {
                 checkTimeBefore = checkTime;
                 total_error += LOOPTIME * fabs(errorPosition) * (checkTime - pulse_time);
             }
-            if (current_num == total_num) {
+            if (i == total_num - 1) {
                 softPwmWrite(MOTOR1, 0);
                 softPwmWrite(MOTOR2, 0);
-                printf("%.5f", total_error);
+                printf("Total Error: %.5f\n", total_error);
                 break;
             }
         }
+        lastTime = millis();
         results[resultCount++] = (PIDResult){ pgain, igain, dgain, total_error };
         pgain = pgain + GAIN_INCREMENT;
+        printf("PGAIN: %.3f\n",pgain);
         total_error = 0;
         checkTime = millis();
         checkTimeBefore = millis();
+    }
     }
     saveResultsToCSV(results, resultCount, "PTest_result.csv");
     return 0;
@@ -173,7 +165,7 @@ float control() {
     e2 = e1;
     e1 = e;
     m1 = m;
-    printf("M: %.3f\n", m);
+    //printf("M: %.3f\n", m);
     return m;
 }
 
@@ -207,13 +199,12 @@ void funcEncoderB() {
     errorPosition = referencePosition - redGearPosition;
 }
 
-void virtual_pulse() {
-    current_num++;
-
-    referencePosition = target_arr[current_num];
+void virtual_pulse(int i) {
+    referencePosition = target_arr[i];
     errorPosition = referencePosition - redGearPosition;
 
     checkTimeBefore = millis();
+    checkTime = millis();
     pulse_time = millis();
 
 }
