@@ -1,82 +1,120 @@
 import time
 import matplotlib.pyplot as plt
 import numpy as np
+import random
 
-LOOPTIME = 0.001
-PULSETIME = 5
+# Constants
+LOOPTIME = 0.001  # 5 milliseconds
+ENC2REDGEAR = 235.78
+MAX_SPEED = 6.25 / 5  # Maximum motor speed
+REFERENCE_POSITION = 10
 
 class Motor:
+    def __init__(self, max_speed):
+        self.speed = 0  # Motor speed
+        self.max_speed = max_speed  # Maximum motor speed
+
+    def set_speed(self, speed):
+        # Limit the speed to the maximum speed
+        self.speed = max(min(speed, self.max_speed), -self.max_speed)
+
+class Encoder:
     def __init__(self):
-        self.position = 0  # 모터의 현재 위치
-        self.max_update = 100
+        self.position = 0  # Encoder position
 
-    def update_position(self, input_value):
-        # 간단한 모델: 입력값에 따라 위치 변경
-        self.position += input_value / 16
-        # 실제 모터 모델은 더 복잡할 수 있음
-
+    def update_position(self, motor_speed, enc_to_red_gear):
+        # Simulate encoder position change
+        self.position += motor_speed
+        return self.position / enc_to_red_gear
 
 class PIDController:
-    def __init__(self, kp, ki, kd, target_arr):
-        self.motor = Motor()
+    def __init__(self, p_gain, i_gain, d_gain):
+        self.p_gain = p_gain
+        self.i_gain = i_gain
+        self.d_gain = d_gain
+        self.integral = 0
+        self.previous_error = 0
 
-        self.kp = kp
-        self.ki = ki
-        self.kd = kd
-        self.target_arr = target_arr
-        self.initialize()
+    def calculate(self, error):
+        dt = LOOPTIME
+        # Integral part
+        self.integral += error * dt
+        integral_term = self.i_gain * self.integral
 
-    def update(self, target_point, current_position):
-        self.time += LOOPTIME
-        error = self.target_arr[target_point] - current_position
-        self.integral += error
-        derivative = error - self.previous_error
+        # Derivative part
+        derivative = (error - self.previous_error) / dt
+        derivative_term = self.d_gain * derivative
 
-        output = self.kp * error + self.ki * self.integral + self.kd * derivative
+        # Proportional part
+        proportional_term = self.p_gain * error
+
+        # Update the previous error for the next derivative calculation
         self.previous_error = error
 
-        self.total_error += LOOPTIME * np.abs(error) * (self.time - 5 * target_point)
+        # Calculate total control signal
+        control_signal = proportional_term + integral_term + derivative_term
+        return control_signal
 
-        if output >= self.motor.max_update:
-            return self.motor.max_update
+def run_test(reference_positions, duration_per_position, motor, encoder, pid_controller):
+    positions = []
+    errors = []
+    time_stamps = []
+    ref_positions_array = []
+    virtual_time = 0  # Initialize virtual time
 
-        return output
+    for ref_pos in reference_positions:
+        end_time = virtual_time + duration_per_position  # Set the end time for the current reference position
 
-    def initialize(self):
-        self.previous_error = 0
-        self.integral = 0
-        self.total_error = 0
-        self.time = 0
-        self.total_error = 0
+        while virtual_time < end_time:
+            # PID Control
+            red_gear_position = encoder.update_position(motor.speed, ENC2REDGEAR)
+            error_position = ref_pos - red_gear_position
+            control_signal = pid_controller.calculate(error_position)
+            motor.set_speed(control_signal)
 
+            # Logging
+            positions.append(red_gear_position)
+            errors.append(error_position)
+            time_stamps.append(virtual_time)
+            ref_positions_array.append(ref_pos)
 
-if __name__ == "__main__":
-    motor_pos_arr = []
-    # PID 파라미터 설정
-    kp = 10
-    ki = 0.05
-    kd = 0.01
+            # Update virtual time
+            virtual_time += LOOPTIME
 
-    for i in range(999, 1000):
+    return time_stamps, positions, errors, ref_positions_array
 
-        target_position = [8]
+# Test Parameters
+test_size = random.randint(5, 9)  # Random test size between 5 and 9
+test_size = 1
+test_positions = random.sample(range(-8, 9), test_size)  # Random positions
+test_positions = np.array([20, 0, 2, 0])
+test_duration = 5  # 5 seconds for each test position
 
-        # PID 컨트롤러 및 모터 초기화
-        pid = PIDController(kp, ki, kd, target_arr=target_position)
-        motor = Motor()
+print(f"test position: {test_positions}")
+ITAE_arr = []
 
-        t = 0
-        step = 0
-        # 시뮬레이션 루프
-        for idx, target_point in enumerate(target_position):
-            while t <= 5 * (idx + 1):
-                step += 1
-                t += LOOPTIME
-                motor_input = pid.update(idx, motor.position)
-                motor.update_position(motor_input)
-                motor_pos_arr.append([t, motor.position])
-        pid.initialize()
+PGAIN, IGAIN, DGAIN = 800,0.2,50
 
-    motor_pos_arr = np.array(motor_pos_arr)
-    plt.scatter(motor_pos_arr[:, 0], motor_pos_arr[:, 1])
-    plt.show()
+motor = Motor(MAX_SPEED)
+encoder = Encoder()
+pid_controller = PIDController(PGAIN, IGAIN, DGAIN)
+
+time_stamps, positions, errors, ref_positions_array = run_test(test_positions, test_duration, motor, encoder, pid_controller)
+
+# Calculate and display ITAE score
+itae_score = sum(np.abs(errors) * np.array(time_stamps)) * LOOPTIME
+print(f"ITAE Score: {itae_score:.2f}")
+ITAE_arr.append(np.array([PGAIN, IGAIN, DGAIN, itae_score]))
+
+plt.figure(figsize=(10, 6))
+plt.plot(time_stamps, positions, label='Gear Position')
+plt.plot(time_stamps, ref_positions_array, 'r--', label='Reference Position')
+
+plt.xlabel('Time (s)')
+plt.ylabel('Position')
+plt.title(f'ITAE: {itae_score}, D: {DGAIN}')
+plt.legend()
+plt.show()
+
+ITAE_arr = np.array(ITAE_arr)
+print(ITAE_arr)
