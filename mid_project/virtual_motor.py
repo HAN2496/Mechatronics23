@@ -87,13 +87,13 @@ def run_test(reference_positions, duration_per_position, motor, encoder, pid_con
 test_size = random.randint(5, 9)  # Random test size between 5 and 9
 test_size = 1
 test_positions = random.sample(range(-8, 9), test_size)  # Random positions
-test_positions = np.array([20, 0, 2, 0])
+test_positions = np.array([20])
 test_duration = 5  # 5 seconds for each test position
 
 print(f"test position: {test_positions}")
 ITAE_arr = []
 
-PGAIN, IGAIN, DGAIN = 800,0.2,50
+PGAIN, IGAIN, DGAIN = 600, 10, 50
 
 motor = Motor(MAX_SPEED)
 encoder = Encoder()
