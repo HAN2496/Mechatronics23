@@ -6,7 +6,7 @@ import pandas as pd
 
 # Constants
 LOOPTIME = 0.001  # 1 milliseconds
-ENC2REDGEAR = 216
+ENC2REDGEAR = 235.78
 MAX_SPEED = 6.25 / 10  # Maximum motor speed
 REFERENCE_POSITION = 10
 
@@ -93,29 +93,24 @@ print(f"test position: {test_positions}")
 ITAE_arr = []
 
 itae_results = []
-for i in np.linspace(0, 1000, 10):
-    for j in np.linspace(0, 100, 10):
-        for k in np.linspace(0, 100, 10):
-            PGAIN, IGAIN, DGAIN = i, j, k
-            motor = Motor(MAX_SPEED)
-            encoder = Encoder()
-            pid_controller = PIDController(PGAIN, IGAIN, DGAIN)
+PGAIN, IGAIN, DGAIN = 100, 1, 1
+motor = Motor(MAX_SPEED)
+encoder = Encoder()
+pid_controller = PIDController(PGAIN, IGAIN, DGAIN)
 
-            time_stamps, positions, errors, ref_positions_array = run_test(test_positions, test_duration, motor, encoder, pid_controller)
-            """
-            plt.figure(figsize=(10, 6))
-            plt.plot(time_stamps, positions, label='Gear Position')
-            plt.plot(time_stamps, ref_positions_array, 'r--', label='Reference Position')
-            
-            plt.xlabel('Time (s)')
-            plt.ylabel('Position')
-            plt.legend()
-            plt.show()
-            """
-            # Calculate and display ITAE score
-            itae_score = sum(np.abs(errors) * np.array(time_stamps)) * LOOPTIME
-            #print(f"ITAE Score: {itae_score:.2f}")
-            itae_results.append([PGAIN, IGAIN, DGAIN, itae_score])
+time_stamps, positions, errors, ref_positions_array = run_test(test_positions, test_duration, motor, encoder, pid_controller)
+plt.figure(figsize=(10, 6))
+plt.plot(time_stamps, positions, label='Gear Position')
+plt.plot(time_stamps, ref_positions_array, 'r--', label='Reference Position')
+
+plt.xlabel('Time (s)')
+plt.ylabel('Position')
+plt.legend()
+plt.show()
+# Calculate and display ITAE score
+itae_score = sum(np.abs(errors) * np.array(time_stamps)) * LOOPTIME
+#print(f"ITAE Score: {itae_score:.2f}")
+itae_results.append([PGAIN, IGAIN, DGAIN, itae_score])
 
 df = pd.DataFrame(itae_results, columns=['PGAIN', 'IGAIN', 'DGAIN', 'ITAE_Score'])
 
