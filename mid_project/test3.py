@@ -2,12 +2,11 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 import random
-import pandas as pd
 
 # Constants
-LOOPTIME = 0.001  # 1 milliseconds
-ENC2REDGEAR = 235.78
-MAX_SPEED = 6.25 / 10  # Maximum motor speed
+LOOPTIME = 0.001  # 5 milliseconds
+ENC2REDGEAR = 235.78*100000
+MAX_SPEED = 6.25 / 5  # Maximum motor speed
 REFERENCE_POSITION = 10
 
 class Motor:
@@ -86,40 +85,36 @@ def run_test(reference_positions, duration_per_position, motor, encoder, pid_con
 
 # Test Parameters
 test_size = random.randint(5, 9)  # Random test size between 5 and 9
+test_size = 1
 test_positions = random.sample(range(-8, 9), test_size)  # Random positions
+test_positions = np.array([20])
 test_duration = 5  # 5 seconds for each test position
 
 print(f"test position: {test_positions}")
 ITAE_arr = []
 
-itae_results = []
-for i in np.linspace(0, 1000, 10):
-    for j in np.linspace(0, 1000, 10):
-        for k in np.linspace(0, 1000, 10):
-            PGAIN, IGAIN, DGAIN = i, j, k
-            motor = Motor(MAX_SPEED)
-            encoder = Encoder()
-            pid_controller = PIDController(PGAIN, IGAIN, DGAIN)
+PGAIN, IGAIN, DGAIN = 600, 10, 50
 
-            time_stamps, positions, errors, ref_positions_array = run_test(test_positions, test_duration, motor, encoder, pid_controller)
-            """
-            plt.figure(figsize=(10, 6))
-            plt.plot(time_stamps, positions, label='Gear Position')
-            plt.plot(time_stamps, ref_positions_array, 'r--', label='Reference Position')
-            
-            plt.xlabel('Time (s)')
-            plt.ylabel('Position')
-            plt.legend()
-            plt.show()
-            """
-            # Calculate and display ITAE score
-            itae_score = sum(np.abs(errors) * np.array(time_stamps)) * LOOPTIME
-            #print(f"ITAE Score: {itae_score:.2f}")
-            itae_results.append([PGAIN, IGAIN, DGAIN, itae_score])
+motor = Motor(MAX_SPEED)
+encoder = Encoder()
+pid_controller = PIDController(PGAIN, IGAIN, DGAIN)
 
-df = pd.DataFrame(itae_results, columns=['PGAIN', 'IGAIN', 'DGAIN', 'ITAE_Score'])
+time_stamps, positions, errors, ref_positions_array = run_test(test_positions, test_duration, motor, encoder, pid_controller)
 
-# CSV 파일로 저장
-df.to_csv('pid_itae_scores3.csv', index=False)
+# Calculate and display ITAE score
+itae_score = sum(np.abs(errors) * np.array(time_stamps)) * LOOPTIME
+print(f"ITAE Score: {itae_score:.2f}")
+ITAE_arr.append(np.array([PGAIN, IGAIN, DGAIN, itae_score]))
 
-print(itae_results)
+plt.figure(figsize=(10, 6))
+plt.plot(time_stamps, positions, label='Gear Position')
+plt.plot(time_stamps, ref_positions_array, 'r--', label='Reference Position')
+
+plt.xlabel('Time (s)')
+plt.ylabel('Position')
+plt.title(f'ITAE: {itae_score}, D: {DGAIN}')
+plt.legend()
+plt.show()
+
+ITAE_arr = np.array(ITAE_arr)
+print(ITAE_arr)

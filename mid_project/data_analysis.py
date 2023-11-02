@@ -6,8 +6,11 @@ def calc_itae():
     pass
 
 
-df = pd.read_csv("51.00-2.00-20.00 (Error- 291115.5).csv").iloc[:, 1]
-plt.plot(df)
-plt.show()
+df = pd.read_csv("pid_itae_scores3.csv")
+pgain = df.iloc[:, 0]
+igain = df.iloc[:, 1]
+dgain = df.iloc[:, 2]
+err = df.iloc[:, 3]
 
-print(f"Total Error: {np.sum()}")
+i0d0 = df.iloc[5::100, :]
+print(i0d0)
