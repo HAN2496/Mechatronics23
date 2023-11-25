@@ -93,10 +93,10 @@ print(f"test position: {test_positions}")
 ITAE_arr = []
 
 itae_results = []
-for i in np.linspace(600, 1000, 400):
-    for j in np.linspace(0, 5, 50):
-        for k in np.linspace(0, 80, 800):
-            PGAIN, IGAIN, DGAIN = i, j, k
+for i in np.linspace(0, 1000, 10):
+    for j in np.linspace(0, 5, 10):
+        for k in np.linspace(0, 80, 10):
+            PGAIN, IGAIN, DGAIN = i, 0, k
 
             motor = Motor(MAX_SPEED)
             encoder = Encoder()

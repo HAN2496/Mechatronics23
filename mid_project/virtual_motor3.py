@@ -4,9 +4,9 @@ import numpy as np
 import random
 
 # Constants
-LOOPTIME = 0.001  # 5 milliseconds
+LOOPTIME = 0.005  # 5 milliseconds
 ENC2REDGEAR = 235.78
-MAX_SPEED = 6.25 / 5  # Maximum motor speed
+MAX_SPEED = 6.25  # Maximum motor speed
 REFERENCE_POSITION = 10
 
 class Motor:
@@ -16,6 +16,7 @@ class Motor:
 
     def set_speed(self, speed):
         # Limit the speed to the maximum speed
+        speed = speed / 100 * 6.25
         self.speed = max(min(speed, self.max_speed), -self.max_speed)
 
 class Encoder:
@@ -33,27 +34,21 @@ class PIDController:
         self.i_gain = i_gain
         self.d_gain = d_gain
         self.integral = 0
-        self.previous_error = 0
+        self.m1 = 0
+        self.e1 = 0
+        self.e2 = 0
 
     def calculate(self, error):
         dt = LOOPTIME
-        # Integral part
-        self.integral += error * dt
-        integral_term = self.i_gain * self.integral
+        g1 = self.p_gain + self.i_gain * dt + self.d_gain / dt
+        g2 = - self.p_gain - 2 * self.d_gain / dt
+        g3 = self.d_gain / dt
+        m = self.m1 + g1 * error + g2 * self.e1 + g3 * self.e2
+        self.e2 = self.e1
+        self.e1 = error
+        self.m1 = m
 
-        # Derivative part
-        derivative = (error - self.previous_error) / dt
-        derivative_term = self.d_gain * derivative
-
-        # Proportional part
-        proportional_term = self.p_gain * error
-
-        # Update the previous error for the next derivative calculation
-        self.previous_error = error
-
-        # Calculate total control signal
-        control_signal = proportional_term + integral_term + derivative_term
-        return control_signal
+        return m
 
 def run_test(reference_positions, duration_per_position, motor, encoder, pid_controller):
     positions = []
@@ -93,7 +88,7 @@ test_duration = 5  # 5 seconds for each test position
 print(f"test position: {test_positions}")
 ITAE_arr = []
 
-PGAIN, IGAIN, DGAIN = 51, 2, 20
+PGAIN, IGAIN, DGAIN = 500, 0.2, 100
 
 motor = Motor(MAX_SPEED)
 encoder = Encoder()
