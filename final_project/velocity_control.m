@@ -3,10 +3,12 @@
 delt = 0.001;
 t0 = 5;
 
-xtarget = 1;
-ytarget = 10;
+x1 = 1;
+x2 = 6;
 vtarget = 3;
 
+xtarget = x1*2;
+ytarget = x2*2;
 vxtarget=xtarget/sqrt(xtarget.^2 + ytarget.^2);
 vytarget=ytarget/sqrt(xtarget.^2 + ytarget.^2);
 
