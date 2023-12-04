@@ -1,46 +1,46 @@
 % 1회전당 2mm 이동
 % 모터 최고 속도는 6.25 회전/s
-delt = 0.001;
+timeStep = 0.001;
 t0 = 5;
 
 x1 = 1;
 x2 = 6;
-vtarget = 3;
+targetV = 3;
 
-xtarget = x1*2;
-ytarget = x2*2;
-vxtarget=xtarget/sqrt(xtarget.^2 + ytarget.^2);
-vytarget=ytarget/sqrt(xtarget.^2 + ytarget.^2);
+targetX = x1*2;
+targetY = x2*2;
+targetVx = targetX/sqrt(targetX.^2 + targetY.^2) * targetV;
+targetVy = targetY/sqrt(targetX.^2 + targetY.^2) * targetV;
 
 
 sum_term = 0;
-for i=1:delt:t0
-    sum_term = sum_term + sineprofile(vxtarget, t0, i) * delt;
+for i=1:timeStep:t0
+    sum_term = sum_term + sineprofile(targetVx, t0, i) * timeStep;
 end
-t1 = (xtarget - sum_term) / vxtarget + 2 * t0;
+totalTime = (targetX - sum_term) / targetVx + 2 * t0;
 
-time_index = 0:0.001:t1;
+timePoints = 0:0.001:totalTime;
 accel_len = t0 * 1000 + 1;
-time_len = length(time_index)
-velocity_profile=zeros(time_len ,2);
+time_len = length(timePoints)
+velocityProfile=zeros(time_len ,2);
 
 
 for idx=1:time_len
-    t = time_index(idx);
+    t = timePoints(idx);
     if idx <= accel_len
-        velocity_profile(idx, 1) = sineprofile(vxtarget, t0, t);
-        velocity_profile(idx, 2) = velocity_profile(idx, 1) * vytarget/vxtarget;
+        velocityProfile(idx, 1) = sineprofile(targetVx, t0, t);
+        velocityProfile(idx, 2) = velocityProfile(idx, 1) * targetVy/targetVx;
     elseif idx <= time_len - accel_len
-        velocity_profile(idx, 1) = vxtarget;
-        velocity_profile(idx, 2) = vytarget;
+        velocityProfile(idx, 1) = targetVx;
+        velocityProfile(idx, 2) = targetVy;
     else
-        velocity_profile(idx, 1) = sineprofile(vxtarget, t0, t1-t);
-        velocity_profile(idx, 2) = velocity_profile(idx, 1) * vytarget/vxtarget;
+        velocityProfile(idx, 1) = sineprofile(targetVx, t0, totalTime-t);
+        velocityProfile(idx, 2) = velocityProfile(idx, 1) * targetVy/targetVx;
     end
 end
 
 
 % 데이터 확인용 플롯
-plot(time_index, velocity_profile(:, 1))
+plot(timePoints, velocityProfile(:, 1))
 hold on
-plot(time_index, velocity_profile(:, 2))
+plot(timePoints, velocityProfile(:, 2))
