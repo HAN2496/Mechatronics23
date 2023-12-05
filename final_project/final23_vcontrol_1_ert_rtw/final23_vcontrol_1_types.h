@@ -7,9 +7,9 @@
  *
  * Code generation for model "final23_vcontrol_1".
  *
- * Model version              : 1.20
+ * Model version              : 1.23
  * Simulink Coder version : 9.5 (R2021a) 14-Nov-2020
- * C source code generated on : Mon Dec  4 21:20:35 2023
+ * C source code generated on : Mon Dec  4 23:26:38 2023
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -24,24 +24,24 @@
 #include "multiword_types.h"
 
 /* Model Code Variants */
-#ifndef struct_tag_rsJ0GE01HUvEHoEeL7l3HC
-#define struct_tag_rsJ0GE01HUvEHoEeL7l3HC
+#ifndef struct_tag_BfXSK7ZBJUn8OqNm57x8PB
+#define struct_tag_BfXSK7ZBJUn8OqNm57x8PB
 
-struct tag_rsJ0GE01HUvEHoEeL7l3HC
+struct tag_BfXSK7ZBJUn8OqNm57x8PB
 {
   int32_T isInitialized;
   boolean_T isSetupComplete;
   real_T pCumSum;
-  real_T pCumSumRev[19];
+  real_T pCumSumRev[99];
   real_T pCumRevIndex;
 };
 
-#endif                                 /* struct_tag_rsJ0GE01HUvEHoEeL7l3HC */
+#endif                                 /* struct_tag_BfXSK7ZBJUn8OqNm57x8PB */
 
 #ifndef typedef_g_dsp_private_SlidingWindowAv_T
 #define typedef_g_dsp_private_SlidingWindowAv_T
 
-typedef struct tag_rsJ0GE01HUvEHoEeL7l3HC g_dsp_private_SlidingWindowAv_T;
+typedef struct tag_BfXSK7ZBJUn8OqNm57x8PB g_dsp_private_SlidingWindowAv_T;
 
 #endif                             /* typedef_g_dsp_private_SlidingWindowAv_T */
 
@@ -62,10 +62,10 @@ typedef struct tag_BlgwLpgj2bjudmbmVKWwDE cell_wrap_final23_vcontrol_1_T;
 
 #endif                              /* typedef_cell_wrap_final23_vcontrol_1_T */
 
-#ifndef struct_tag_Q9Q7bpC5hgdHXLdOOoEToG
-#define struct_tag_Q9Q7bpC5hgdHXLdOOoEToG
+#ifndef struct_tag_2MIXNJKQHkVDzjvOGDVQPG
+#define struct_tag_2MIXNJKQHkVDzjvOGDVQPG
 
-struct tag_Q9Q7bpC5hgdHXLdOOoEToG
+struct tag_2MIXNJKQHkVDzjvOGDVQPG
 {
   boolean_T matlabCodegenIsDeleted;
   int32_T isInitialized;
@@ -77,12 +77,12 @@ struct tag_Q9Q7bpC5hgdHXLdOOoEToG
   g_dsp_private_SlidingWindowAv_T _pobj0;
 };
 
-#endif                                 /* struct_tag_Q9Q7bpC5hgdHXLdOOoEToG */
+#endif                                 /* struct_tag_2MIXNJKQHkVDzjvOGDVQPG */
 
 #ifndef typedef_dsp_simulink_MovingAverage_fi_T
 #define typedef_dsp_simulink_MovingAverage_fi_T
 
-typedef struct tag_Q9Q7bpC5hgdHXLdOOoEToG dsp_simulink_MovingAverage_fi_T;
+typedef struct tag_2MIXNJKQHkVDzjvOGDVQPG dsp_simulink_MovingAverage_fi_T;
 
 #endif                             /* typedef_dsp_simulink_MovingAverage_fi_T */
 

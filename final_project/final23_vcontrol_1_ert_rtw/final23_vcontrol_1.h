@@ -7,9 +7,9 @@
  *
  * Code generation for model "final23_vcontrol_1".
  *
- * Model version              : 1.20
+ * Model version              : 1.23
  * Simulink Coder version : 9.5 (R2021a) 14-Nov-2020
- * C source code generated on : Mon Dec  4 21:20:35 2023
+ * C source code generated on : Mon Dec  4 23:26:38 2023
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -173,7 +173,7 @@
 
 /* Block signals for system '<S5>/Moving Average' */
 typedef struct {
-  real_T csumrev[19];
+  real_T csumrev[99];
   real_T MovingAverage;                /* '<S5>/Moving Average' */
 } B_MovingAverage_final23_vcont_T;
 
@@ -220,10 +220,10 @@ typedef struct {
   real_T LastUAtTimeA;                 /* '<S3>/Derivative' */
   real_T TimeStampB;                   /* '<S3>/Derivative' */
   real_T LastUAtTimeB;                 /* '<S3>/Derivative' */
-  real_T TimeStampA_a;                 /* '<S4>/Derivative' */
-  real_T LastUAtTimeA_i;               /* '<S4>/Derivative' */
-  real_T TimeStampB_o;                 /* '<S4>/Derivative' */
-  real_T LastUAtTimeB_m;               /* '<S4>/Derivative' */
+  real_T TimeStampA_k;                 /* '<S4>/Derivative' */
+  real_T LastUAtTimeA_o;               /* '<S4>/Derivative' */
+  real_T TimeStampB_k;                 /* '<S4>/Derivative' */
+  real_T LastUAtTimeB_n;               /* '<S4>/Derivative' */
   struct {
     void *TimePtr;
     void *DataPtr;
@@ -236,11 +236,19 @@ typedef struct {
 
   struct {
     void *AQHandles;
+  } TAQSigLogging_InsertedFor_posto;   /* synthesized block */
+
+  struct {
+    void *AQHandles;
   } TAQSigLogging_InsertedFor_Encod;   /* synthesized block */
 
   struct {
     void *LoggedData;
   } ToWorkspace1_PWORK;                /* '<Root>/To Workspace1' */
+
+  struct {
+    void *AQHandles;
+  } TAQSigLogging_InsertedFor_pos_j;   /* synthesized block */
 
   struct {
     void *TimePtr;
@@ -311,16 +319,16 @@ typedef struct {
 
 /* Parameters (default storage) */
 struct P_final23_vcontrol_1_T_ {
-  real_T PGain_Gain;                   /* Expression: 50
+  real_T PGain_Gain;                   /* Expression: 500
                                         * Referenced by: '<S3>/P Gain'
                                         */
   real_T Integrator_IC;                /* Expression: 0
                                         * Referenced by: '<S3>/Integrator'
                                         */
-  real_T IGain_Gain;                   /* Expression: 1
+  real_T IGain_Gain;                   /* Expression: 0.2
                                         * Referenced by: '<S3>/I Gain'
                                         */
-  real_T DGain_Gain;                   /* Expression: 1
+  real_T DGain_Gain;                   /* Expression: 10
                                         * Referenced by: '<S3>/D Gain'
                                         */
   real_T Constant_Value;               /* Expression: 0
@@ -338,16 +346,16 @@ struct P_final23_vcontrol_1_T_ {
   real_T GPIO26Gain_Gain;              /* Expression: 1/100
                                         * Referenced by: '<S1>/GPIO26 Gain'
                                         */
-  real_T PGain_Gain_i;                 /* Expression: 50
+  real_T PGain_Gain_b;                 /* Expression: 500
                                         * Referenced by: '<S4>/P Gain'
                                         */
-  real_T Integrator_IC_m;              /* Expression: 0
+  real_T Integrator_IC_f;              /* Expression: 0
                                         * Referenced by: '<S4>/Integrator'
                                         */
-  real_T IGain_Gain_j;                 /* Expression: 1
+  real_T IGain_Gain_d;                 /* Expression: 0.2
                                         * Referenced by: '<S4>/I Gain'
                                         */
-  real_T DGain_Gain_h;                 /* Expression: 1
+  real_T DGain_Gain_k;                 /* Expression: 10
                                         * Referenced by: '<S4>/D Gain'
                                         */
   real_T Constant_Value_e;             /* Expression: 0

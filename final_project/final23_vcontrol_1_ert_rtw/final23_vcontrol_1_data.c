@@ -7,9 +7,9 @@
  *
  * Code generation for model "final23_vcontrol_1".
  *
- * Model version              : 1.20
+ * Model version              : 1.23
  * Simulink Coder version : 9.5 (R2021a) 14-Nov-2020
- * C source code generated on : Mon Dec  4 21:20:35 2023
+ * C source code generated on : Mon Dec  4 23:26:38 2023
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -23,25 +23,25 @@
 
 /* Block parameters (default storage) */
 P_final23_vcontrol_1_T final23_vcontrol_1_P = {
-  /* Expression: 50
+  /* Expression: 500
    * Referenced by: '<S3>/P Gain'
    */
-  50.0,
+  500.0,
 
   /* Expression: 0
    * Referenced by: '<S3>/Integrator'
    */
   0.0,
 
-  /* Expression: 1
+  /* Expression: 0.2
    * Referenced by: '<S3>/I Gain'
    */
-  1.0,
+  0.2,
 
-  /* Expression: 1
+  /* Expression: 10
    * Referenced by: '<S3>/D Gain'
    */
-  1.0,
+  10.0,
 
   /* Expression: 0
    * Referenced by: '<S1>/Constant'
@@ -68,25 +68,25 @@ P_final23_vcontrol_1_T final23_vcontrol_1_P = {
    */
   0.01,
 
-  /* Expression: 50
+  /* Expression: 500
    * Referenced by: '<S4>/P Gain'
    */
-  50.0,
+  500.0,
 
   /* Expression: 0
    * Referenced by: '<S4>/Integrator'
    */
   0.0,
 
-  /* Expression: 1
+  /* Expression: 0.2
    * Referenced by: '<S4>/I Gain'
    */
-  1.0,
+  0.2,
 
-  /* Expression: 1
+  /* Expression: 10
    * Referenced by: '<S4>/D Gain'
    */
-  1.0,
+  10.0,
 
   /* Expression: 0
    * Referenced by: '<S2>/Constant'
@@ -136,12 +136,12 @@ P_final23_vcontrol_1_T final23_vcontrol_1_P = {
   /* Computed Parameter: EncoderGain1_Gain
    * Referenced by: '<Root>/Encoder Gain1'
    */
-  1272582903,
+  1174691910,
 
   /* Computed Parameter: EncoderGain2_Gain
    * Referenced by: '<Root>/Encoder Gain2'
    */
-  1272582903,
+  1215198528,
 
   /* Expression: uint8(0)
    * Referenced by: '<Root>/Quad Encoder 2axis'
