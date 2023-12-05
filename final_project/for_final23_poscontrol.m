@@ -8,55 +8,38 @@ x1 = -10; y1=-20;
 x2 = 20; y2 = -10;
 targetV = 3;
 
-delX = x1/2;
-delY = y1/2;
+delX = x1;
+delY = y1;
 
-targetVx = delX/sqrt(delX.^2 + delY.^2) * targetV;
-targetVy = delY/sqrt(delX.^2 + delY.^2) * targetV;
+targetX = delX/2;
+targetY = delY/2;
 
-totalTime = (delX - sum_term) / targetVx + 2 * t0;
-
-
-totalTime = sqrt(delx** 2 + dely ** 2) / targetV;
+totalTime = sqrt(targetX.^2 + targetY.^2) / targetV;
 timePoints = 0:0.001:totalTime;
-accel_len = t0 * 1000 + 1;
 time_len = length(timePoints);
 
 positionProfile1=zeros(time_len ,2);
 for idx=1:time_len
-    positionProfile1(idx, 1) = delX/time_len * idx;
-    positionProfile1(idx, 2) = delY/time_len * idx;
+    positionProfile1(idx, 1) = targetX/time_len * idx;
+    positionProfile1(idx, 2) = targetY/time_len * idx;
 end
+
+
 
 delx = x2 - x1;
 dely= y2 - y1;
 
 targetX = delx/2;
 targetY = dely/2;
-targetVx = targetX/sqrt(targetX.^2 + targetY.^2) * targetV;
-targetVy = targetY/sqrt(targetX.^2 + targetY.^2) * targetV;
 
-
-sum_term = 0;
-for i=1:timeStep:t0
-    sum_term = sum_term + sineprofile(targetVx, t0, i) * timeStep;
-end
-totalTime = (targetX - sum_term) / targetVx + 2 * t0;
-
-
+totalTime = sqrt(targetX.^2 + targetY.^2) / targetV;
 timePoints = 0:0.001:totalTime;
-accel_len = t0 * 1000 + 1;
 time_len = length(timePoints);
-positionProfile2=zeros(time_len ,2);
-
 positionProfile2=zeros(time_len ,2);
 for idx=1:time_len
     positionProfile2(idx, 1) = positionProfile1(end, 1) + targetX/time_len * idx;
     positionProfile2(idx, 2) = positionProfile1(end, 2) + targetY/time_len * idx;
 end
-
-
-
 
 
 delt=0.0001;
@@ -78,7 +61,6 @@ for idx = 1:time_len
     velocityProfile3(idx, 1) = r * cos(theta - t(idx) * pi / t0);
     velocityProfile3(idx, 2) = r * sin(theta - t(idx) * pi / t0);
 end
-plot(velocityProfile3(:, 1), velocityProfile3(:, 2))
 vx = r*sin(theta-t*pi/t0)*pi/t0;  vx(end+1:end+500)=zeros(500,1);
 vy = -r*cos(theta-t*pi/t0)*pi/t0; vy(end+1:end+500)=zeros(500,1);
 
@@ -90,11 +72,13 @@ yvelinput = timetable(tsec,vy);
 
 
 
-x_vel_all = [positionProfile1(:, 1); positionProfile2(:, 1); velocityProfile3(:, 1)];
-y_vel_all = [positionProfile1(:, 2); positionProfile2(:, 2); velocityProfile3(:, 2)];
-time_all = 0:0.001:(length(x_vel_all)-1)/1000;
+positionProfileX = [positionProfile1(:, 1); positionProfile2(:, 1); velocityProfile3(:, 1)];
+positionProfileY = [positionProfile1(:, 2); positionProfile2(:, 2); velocityProfile3(:, 2)];
+time_all = 0:0.001:(length(positionProfileX)-1)/1000;
 time_all = time_all';
 time_all = seconds(time_all);
 
-xvelinput = timetable(time_all,x_vel_all);
-yvelinput = timetable(time_all,y_vel_all);
+xvelinput = timetable(time_all,positionProfileX);
+yvelinput = timetable(time_all,positionProfileY);
+
+plot(positionProfileX, positionProfileY)
