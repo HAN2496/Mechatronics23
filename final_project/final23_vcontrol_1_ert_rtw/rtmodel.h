@@ -7,9 +7,9 @@
  *
  * Code generation for model "final23_vcontrol_1".
  *
- * Model version              : 1.23
+ * Model version              : 1.27
  * Simulink Coder version : 9.5 (R2021a) 14-Nov-2020
- * C source code generated on : Mon Dec  4 23:26:38 2023
+ * C source code generated on : Tue Dec  5 16:21:34 2023
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -23,7 +23,7 @@
  * Code generation for Simulink model "final23_vcontrol_1".
  *
  * Simulink Coder version                : 9.5 (R2021a) 14-Nov-2020
- * C source code generated on : Mon Dec  4 23:26:38 2023
+ * C source code generated on : Tue Dec  5 16:21:34 2023
  *
  * Note that the generated code is not dependent on this header file.
  * The file is used in cojuction with the automatic build procedure.

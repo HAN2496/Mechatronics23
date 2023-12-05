@@ -7,9 +7,9 @@
  *
  * Code generation for model "final23_vcontrol_1".
  *
- * Model version              : 1.23
+ * Model version              : 1.27
  * Simulink Coder version : 9.5 (R2021a) 14-Nov-2020
- * C source code generated on : Mon Dec  4 23:26:38 2023
+ * C source code generated on : Tue Dec  5 16:21:34 2023
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -136,12 +136,12 @@ P_final23_vcontrol_1_T final23_vcontrol_1_P = {
   /* Computed Parameter: EncoderGain1_Gain
    * Referenced by: '<Root>/Encoder Gain1'
    */
-  1174691910,
+  1272582903,
 
   /* Computed Parameter: EncoderGain2_Gain
    * Referenced by: '<Root>/Encoder Gain2'
    */
-  1215198528,
+  1272582903,
 
   /* Expression: uint8(0)
    * Referenced by: '<Root>/Quad Encoder 2axis'
