@@ -4,8 +4,8 @@ clear;clc;
 timeStep = 0.001;
 t0 = 0.5;
 
-x1 = -10; y1=-20;
-x2 = 20; y2 = -10;
+x1 = 20; y1=40;
+x2 = 50; y2 = 20;
 targetV = 3;
 
 delX = x1;
@@ -42,8 +42,7 @@ for idx=1:time_len
 end
 
 
-delt=0.0001;
-x0 = 20; y0 = -40; %현재위치
+x0 = x2; y0 = y2; %현재위치
 x1 = 0; y1 = 0; %목표위치
 x_r = (x0+x1)/2;
 y_r = (y0+y1)/2;
@@ -58,8 +57,8 @@ time_len = length(t);
 velocityProfile3=zeros(time_len ,2);
 
 for idx = 1:time_len
-    velocityProfile3(idx, 1) = r * cos(theta - t(idx) * pi / t0);
-    velocityProfile3(idx, 2) = r * sin(theta - t(idx) * pi / t0);
+    velocityProfile3(idx, 1) = x_r/2+ r * cos(theta - t(idx) * pi / t0);
+    velocityProfile3(idx, 2) = y_r/2+ r * sin(theta - t(idx) * pi / t0);
 end
 vx = r*sin(theta-t*pi/t0)*pi/t0;  vx(end+1:end+500)=zeros(500,1);
 vy = -r*cos(theta-t*pi/t0)*pi/t0; vy(end+1:end+500)=zeros(500,1);
@@ -74,11 +73,18 @@ yvelinput = timetable(tsec,vy);
 
 positionProfileX = [positionProfile1(:, 1); positionProfile2(:, 1); velocityProfile3(:, 1)];
 positionProfileY = [positionProfile1(:, 2); positionProfile2(:, 2); velocityProfile3(:, 2)];
+
+positionProfileX(end+1:end+1000) = zeros(1000,1);   % 이동후 1초간 위치 (0, 0)
+positionProfileY(end+1:end+1000) = zeros(1000,1);   %
+
 time_all = 0:0.001:(length(positionProfileX)-1)/1000;
 time_all = time_all';
 time_all = seconds(time_all);
 
 xvelinput = timetable(time_all,positionProfileX);
 yvelinput = timetable(time_all,positionProfileY);
+
+
+
 
 plot(positionProfileX, positionProfileY)

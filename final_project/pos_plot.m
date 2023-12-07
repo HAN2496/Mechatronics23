@@ -1,7 +1,4 @@
-plot(xpos,ypos)
-syms x y;
-circle=(x-(x0+x1)/2)^2+(y-(y0+y1)/2)^2==r^2;
+plot(positionProfileX, positionProfileY)
 hold on
-fimplicit(circle)
-axis equal
+plot(xpos,ypos);
 hold off
