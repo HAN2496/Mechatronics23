@@ -25,6 +25,6 @@ yvelinput = timetable(timeVecSec, yVec);
 
 scatter(xVec, yVec)
 
-title('Problem 2-1 (Not considering paths) ');
+title('Problem 2-2');
 xlabel('X position');
 ylabel('Y position');

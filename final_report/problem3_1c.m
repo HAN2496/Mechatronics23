@@ -1,14 +1,15 @@
 clear;clc;
-timeStep = 0.001;
+time_step = 0.001;
 
-divideInterval = 10;
 targetX = 64;
 targetY = 48;
-tagetDist = sqrt(targetX.^2 + targetY.^2);
-totalTime = tagetDist / divideInterval * timeStep;
+targetV = 5;
 
-timeVec = (0:timeStep:totalTime)';
-lenTimeVec = length(timeVec);
+tagetDist = sqrt(targetX.^2 + targetY.^2);
+totalTime = tagetDist / targetV * time_step;
+
+timeVec = (0:time_step:totalTime)';
+lenTimeVec = length(timeVec);   
 
 xVec = zeros(lenTimeVec, 1);
 yVec = zeros(lenTimeVec, 1);
@@ -24,6 +25,6 @@ yvelinput = timetable(timeVecSec, yVec);
 
 scatter(xVec, yVec)
 
-title('Problem 2-1 (Not considering paths) ');
+title('Problem 2-2');
 xlabel('X position');
 ylabel('Y position');
