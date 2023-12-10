@@ -6,7 +6,7 @@ targetY = 48;
 targetV = 5;
 
 tagetDist = sqrt(targetX.^2 + targetY.^2);
-totalTime = tagetDist / targetV * time_step;
+totalTime = tagetDist / targetV;
 
 timeVec = (0:time_step:totalTime)';
 lenTimeVec = length(timeVec);

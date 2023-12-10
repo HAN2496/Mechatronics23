@@ -37,15 +37,11 @@ timeVecSec = seconds(timeVec);
 xvelinput = timetable(timeVecSec, xVec);
 yvelinput = timetable(timeVecSec, yVec);
 
-subplot(411)
 plot(timeVec, xVec)
-subplot(412)
 plot(timeVec, yVec)
-subplot(421)
 plot(timeVec, errorVec)
-subplot(422)
 plot(timeVec, vVec)
 
-title('Problem 2-3');
+title('Problem 2-1 (Not considering paths) ');
 xlabel('X position');
 ylabel('Y position');

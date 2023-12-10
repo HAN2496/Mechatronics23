@@ -1,7 +1,7 @@
 clear;clc;
 timeStep = 0.001;
 
-accelTime =4; % 가속구간 길이
+accelTime =3; % 가속구간 길이
 targetX = 64;
 targetY = 48;
 targetV = 5;
@@ -16,14 +16,18 @@ lenTimeVec = length(timeVec);
 
 xVec = zeros(lenTimeVec, 1);
 yVec = zeros(lenTimeVec, 1);
-
+tmp = 0;
+tmp2 = 0;
+a=accelTime;
 for idx=1:lenTimeVec
     t = timeVec(idx);
-    if t <= accelTime
+    if t <= a-a/10-log((5/a-targetVx+sqrt((targetVx-10/a)^2-targetVx^2))/targetVx)
         xVec(idx) = sineProfile(targetVx, accelTime, t);
         yVec(idx) = xVec(idx) * targetVy/targetVx;
+        tmp = xVec(idx);
+        tmp2 = idx;
     else
-        xVec(idx) = targetX/lenTimeVec * idx;
+        xVec(idx) = tmp + targetX/lenTimeVec * (idx-tmp2);
         yVec(idx) = xVec(idx) * targetVy/targetVx;
     end
 end
