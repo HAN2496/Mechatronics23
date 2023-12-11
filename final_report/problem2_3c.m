@@ -1,4 +1,3 @@
-clear;clc;
 time_step = 0.001;
 
 targetX = 64;
@@ -7,10 +6,10 @@ targetV = 5;
 
 xdata = xpos;
 ydata = ypos;
-timeData = xdata.Time;
+timeData = timeVec;
 lenTimeData = length(timeData);
-xData = xdata.Data;
-yData = ydata.Data;
+xData = xdata;
+yData = ydata;
 
 tagetDist = sqrt(targetX.^2 + targetY.^2);
 
@@ -24,11 +23,11 @@ for idx=1:lenTimeData
     dist = abs(slope * xData(idx) - yData(idx)) / sqrt(slope.^2+1);
     errorVec(idx) = dist; 
     % 속도 계산
-    if idx == 1
+    if idx <=20
         vVec(idx) = 0; % 초기속도
     else
-        distance = sqrt((xData(idx) - yData(idx-1))^2 + (xData(idx) - yData(idx-1))^2);
-        vVec(idx) = distance / time_step;
+        distance = sqrt((xData(idx) - xData(idx-20))^2 + (yData(idx) - yData(idx-20))^2);
+        vVec(idx) = distance / (time_step*20);
     end
 
 end
@@ -37,15 +36,23 @@ timeVecSec = seconds(timeVec);
 xvelinput = timetable(timeVecSec, xVec);
 yvelinput = timetable(timeVecSec, yVec);
 
-subplot(411)
+subplot(4,1,1)
 plot(timeVec, xVec)
-subplot(412)
-plot(timeVec, yVec)
-subplot(421)
-plot(timeVec, errorVec)
-subplot(422)
-plot(timeVec, vVec)
-
 title('Problem 2-3');
-xlabel('X position');
+xlabel('time');
+ylabel('X position');
+
+subplot(4,1,2)
+plot(timeVec, yVec)
+xlabel('time');
 ylabel('Y position');
+
+subplot(4,1,3)
+plot(timeVec, errorVec)
+xlabel('time');
+ylabel('Error');
+
+subplot(4,1,4)
+plot(timeVec, vVec)
+xlabel('time');
+ylabel('Velocity');

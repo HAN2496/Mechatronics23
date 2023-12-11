@@ -19,6 +19,11 @@ for idx=1:lenTimeVec
     yVec(idx) = targetY/lenTimeVec * idx;
 end
 
+xVec(idx+1:idx+1000)=targetX*ones(1000,1); % 1초씩 더들어감 (발산 방지)
+yVec(idx+1:idx+1000)=targetY*ones(1000,1);
+
+timeVec = (0:time_step:totalTime+1)';   % 1초 추가
+
 timeVecSec = seconds(timeVec);
 xvelinput = timetable(timeVecSec, xVec);
 yvelinput = timetable(timeVecSec, yVec);
