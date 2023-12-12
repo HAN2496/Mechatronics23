@@ -7,9 +7,9 @@
  *
  * Code generation for model "final23_poscontrol".
  *
- * Model version              : 1.31
+ * Model version              : 1.38
  * Simulink Coder version : 9.5 (R2021a) 14-Nov-2020
- * C source code generated on : Thu Dec  7 18:39:05 2023
+ * C source code generated on : Tue Dec 12 15:49:32 2023
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -176,7 +176,9 @@ typedef struct {
   int64_T EncoderGain1;                /* '<Root>/Encoder Gain1' */
   int64_T EncoderGain2;                /* '<Root>/Encoder Gain2' */
   real_T FromWorkspace;                /* '<Root>/From Workspace' */
+  real_T Divide;                       /* '<Root>/Divide' */
   real_T Sum1;                         /* '<Root>/Sum1' */
+  real_T Divide1;                      /* '<Root>/Divide1' */
   real_T FromWorkspace1;               /* '<Root>/From Workspace1' */
   real_T Sum2;                         /* '<Root>/Sum2' */
   int32_T QuadEncoder2axis_o1;         /* '<Root>/Quad Encoder 2axis' */
@@ -210,11 +212,19 @@ typedef struct {
 
   struct {
     void *AQHandles;
-  } TAQSigLogging_InsertedFor_Encod;   /* synthesized block */
+  } TAQSigLogging_InsertedFor_Divid;   /* synthesized block */
 
   struct {
     void *LoggedData;
   } ToWorkspace1_PWORK;                /* '<Root>/To Workspace1' */
+
+  struct {
+    void *AQHandles;
+  } TAQSigLogging_InsertedFor_Div_n;   /* synthesized block */
+
+  struct {
+    void *LoggedData;
+  } ToWorkspace2_PWORK;                /* '<Root>/To Workspace2' */
 
   struct {
     void *TimePtr;
@@ -228,15 +238,11 @@ typedef struct {
 
   struct {
     void *AQHandles;
-  } TAQSigLogging_InsertedFor_Enc_a;   /* synthesized block */
+  } TAQSigLogging_InsertedFor_Encod;   /* synthesized block */
 
   struct {
-    void *LoggedData;
-  } ToWorkspace2_PWORK;                /* '<Root>/To Workspace2' */
-
-  struct {
-    void *LoggedData;
-  } ToWorkspace_PWORK;                 /* '<Root>/To Workspace' */
+    void *AQHandles;
+  } TAQSigLogging_InsertedFor_Enc_j;   /* synthesized block */
 
   struct {
     int_T PrevIndex;
@@ -283,7 +289,10 @@ typedef struct {
 
 /* Parameters (default storage) */
 struct P_final23_poscontrol_T_ {
-  real_T PGain_Gain;                   /* Expression: 500
+  real_T Constant_Value;               /* Expression: 2
+                                        * Referenced by: '<Root>/Constant'
+                                        */
+  real_T PGain_Gain;                   /* Expression: 600
                                         * Referenced by: '<S3>/P Gain'
                                         */
   real_T Integrator_IC;                /* Expression: 0
@@ -292,10 +301,10 @@ struct P_final23_poscontrol_T_ {
   real_T IGain_Gain;                   /* Expression: 0.2
                                         * Referenced by: '<S3>/I Gain'
                                         */
-  real_T DGain_Gain;                   /* Expression: 10
+  real_T DGain_Gain;                   /* Expression: 50
                                         * Referenced by: '<S3>/D Gain'
                                         */
-  real_T Constant_Value;               /* Expression: 0
+  real_T Constant_Value_d;             /* Expression: 0
                                         * Referenced by: '<S1>/Constant'
                                         */
   real_T Switch1_Threshold;            /* Expression: 0
@@ -310,7 +319,7 @@ struct P_final23_poscontrol_T_ {
   real_T GPIO26Gain_Gain;              /* Expression: 1/100
                                         * Referenced by: '<S1>/GPIO26 Gain'
                                         */
-  real_T PGain_Gain_b;                 /* Expression: 500
+  real_T PGain_Gain_b;                 /* Expression: 600
                                         * Referenced by: '<S4>/P Gain'
                                         */
   real_T Integrator_IC_f;              /* Expression: 0
@@ -319,7 +328,7 @@ struct P_final23_poscontrol_T_ {
   real_T IGain_Gain_d;                 /* Expression: 0.2
                                         * Referenced by: '<S4>/I Gain'
                                         */
-  real_T DGain_Gain_k;                 /* Expression: 10
+  real_T DGain_Gain_k;                 /* Expression: 50
                                         * Referenced by: '<S4>/D Gain'
                                         */
   real_T Constant_Value_e;             /* Expression: 0

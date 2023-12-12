@@ -7,9 +7,9 @@
  *
  * Code generation for model "final23_poscontrol".
  *
- * Model version              : 1.31
+ * Model version              : 1.38
  * Simulink Coder version : 9.5 (R2021a) 14-Nov-2020
- * C source code generated on : Thu Dec  7 18:39:05 2023
+ * C source code generated on : Tue Dec 12 15:49:32 2023
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -23,10 +23,15 @@
 
 /* Block parameters (default storage) */
 P_final23_poscontrol_T final23_poscontrol_P = {
-  /* Expression: 500
+  /* Expression: 2
+   * Referenced by: '<Root>/Constant'
+   */
+  2.0,
+
+  /* Expression: 600
    * Referenced by: '<S3>/P Gain'
    */
-  500.0,
+  600.0,
 
   /* Expression: 0
    * Referenced by: '<S3>/Integrator'
@@ -38,10 +43,10 @@ P_final23_poscontrol_T final23_poscontrol_P = {
    */
   0.2,
 
-  /* Expression: 10
+  /* Expression: 50
    * Referenced by: '<S3>/D Gain'
    */
-  10.0,
+  50.0,
 
   /* Expression: 0
    * Referenced by: '<S1>/Constant'
@@ -68,10 +73,10 @@ P_final23_poscontrol_T final23_poscontrol_P = {
    */
   0.01,
 
-  /* Expression: 500
+  /* Expression: 600
    * Referenced by: '<S4>/P Gain'
    */
-  500.0,
+  600.0,
 
   /* Expression: 0
    * Referenced by: '<S4>/Integrator'
@@ -83,10 +88,10 @@ P_final23_poscontrol_T final23_poscontrol_P = {
    */
   0.2,
 
-  /* Expression: 10
+  /* Expression: 50
    * Referenced by: '<S4>/D Gain'
    */
-  10.0,
+  50.0,
 
   /* Expression: 0
    * Referenced by: '<S2>/Constant'
@@ -116,12 +121,12 @@ P_final23_poscontrol_T final23_poscontrol_P = {
   /* Computed Parameter: EncoderGain1_Gain
    * Referenced by: '<Root>/Encoder Gain1'
    */
-  1174691910,
+  1165280033,
 
   /* Computed Parameter: EncoderGain2_Gain
    * Referenced by: '<Root>/Encoder Gain2'
    */
-  1215198528,
+  1249217901,
 
   /* Expression: uint8(0)
    * Referenced by: '<Root>/Quad Encoder 2axis'

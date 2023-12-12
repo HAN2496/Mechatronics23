@@ -4,8 +4,8 @@ clear;clc;
 timeStep = 0.001;
 t0 = 0.5;
 
-x1 = 20; y1=40;
-x2 = 50; y2 = 20;
+x1 = 20; y1= 10;
+x2 = 30; y2 = -10;
 targetV = 3;
 
 delX = x1;
