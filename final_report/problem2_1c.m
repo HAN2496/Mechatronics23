@@ -1,13 +1,13 @@
 clear;clc;
 timeStep = 0.001;
 
-divideInterval = 10;
+divideDistance = 0.5 % 나누는 길이
 targetX = 64;
 targetY = 48;
 tagetDist = sqrt(targetX.^2 + targetY.^2);
-totalTime = tagetDist / divideInterval * timeStep;
+totalTime = tagetDist / divideDistance * timeStep;
 
-timeVec = (0:timeStep:totalTime)';
+timeVec = (0:timeStep:totalTime)'; %시간 벡터
 lenTimeVec = length(timeVec)-1;
 
 xVec = zeros(lenTimeVec+1, 1);
@@ -19,11 +19,33 @@ for idx=1:lenTimeVec+1
 end
 
 timeVecSec = seconds(timeVec);
-xvelinput = timetable(timeVecSec, xVec);
-yvelinput = timetable(timeVecSec, yVec);
+xInput = timetable(timeVecSec, xVec);
+yInput = timetable(timeVecSec, yVec);
 
+subplot(3,1,1)
 scatter(xVec, yVec)
+hold on;
+plot(xVec, yVec)
+hold off;
+title('Problem 2-1 (Dividing n euqal parts) ');
+xlabel('X position (mm)');
+ylabel('Y position (mm)');
 
-title('Problem 2-1 (Not considering paths) ');
-xlabel('X position');
-ylabel('Y position');
+subplot(3,1,2)
+scatter(timeVec, xVec)
+hold on;
+plot(timeVec, xVec)
+hold off;
+title('Problem 2-1 (t - x)');
+xlabel('t (sec)');
+ylabel('X position (mm)');
+
+subplot(3,1, 3)
+scatter(timeVec, yVec)
+hold on;
+plot(timeVec, yVec)
+hold off;
+title('Problem 2-1 (t - y)');
+xlabel('time (sec)');
+ylabel('Y position (mm)');
+
