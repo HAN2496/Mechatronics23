@@ -8,14 +8,14 @@ tagetDist = sqrt(targetX.^2 + targetY.^2);
 totalTime = tagetDist / divideInterval * timeStep;
 
 timeVec = (0:timeStep:totalTime)';
-lenTimeVec = length(timeVec)-1;
+lenTimeVec = length(timeVec);
 
-xVec = zeros(lenTimeVec+1, 1);
-yVec = zeros(lenTimeVec+1, 1);
+xVec = zeros(lenTimeVec, 1);
+yVec = zeros(lenTimeVec, 1);
 
-for idx=1:lenTimeVec+1
+for idx=1:lenTimeVec
     xVec(idx) = targetX/lenTimeVec * (idx-1);
-    yVec(idx) = targetY/lenTimeVec * (idx-1);
+    yVec(idx) = targetY/lenTimeVec * idx;
 end
 
 timeVecSec = seconds(timeVec);

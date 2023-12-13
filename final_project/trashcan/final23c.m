@@ -4,15 +4,15 @@ clear;clc;
 timeStep = 0.001;
 t0 = 0.5;
 
-x1 = 20; y1= 10;
-x2 = 30; y2 = -10;
+x1 = 20; y1=40;
+x2 = 50; y2 = 20;
 targetV = 3;
 
 delX = x1;
 delY = y1;
 
-targetX = delX;
-targetY = delY;
+targetX = delX/2;
+targetY = delY/2;
 
 totalTime = sqrt(targetX.^2 + targetY.^2) / targetV;
 timePoints = 0:0.001:totalTime;
@@ -29,8 +29,8 @@ end
 delx = x2 - x1;
 dely= y2 - y1;
 
-targetX = delx;
-targetY = dely;
+targetX = delx/2;
+targetY = dely/2;
 
 totalTime = sqrt(targetX.^2 + targetY.^2) / targetV;
 timePoints = 0:0.001:totalTime;
@@ -47,7 +47,7 @@ x1 = 0; y1 = 0; %목표위치
 x_r = (x0+x1)/2;
 y_r = (y0+y1)/2;
 
-r = sqrt((x0-x1)^2+(y0-y1)^2)/2;
+r = sqrt((x0-x1)^2+(y0-y1)^2)/2/2;
 path_len = pi*r;
 t0 = path_len/targetV;
 theta = atan((y0-y1)/(x0-x1));
@@ -57,13 +57,17 @@ time_len = length(t);
 velocityProfile3=zeros(time_len ,2);
 
 for idx = 1:time_len
-    velocityProfile3(idx, 1) = x_r+ r * cos(theta - t(idx) * pi / t0);
-    velocityProfile3(idx, 2) = y_r+ r * sin(theta - t(idx) * pi / t0);
+    velocityProfile3(idx, 1) = x_r/2+ r * cos(theta - t(idx) * pi / t0);
+    velocityProfile3(idx, 2) = y_r/2+ r * sin(theta - t(idx) * pi / t0);
 end
+vx = r*sin(theta-t*pi/t0)*pi/t0;  vx(end+1:end+500)=zeros(500,1);
+vy = -r*cos(theta-t*pi/t0)*pi/t0; vy(end+1:end+500)=zeros(500,1);
 
 t = (0:0.001:t0+0.5)';
 tsec = seconds(t);
 
+xvelinput = timetable(tsec,vx);
+yvelinput = timetable(tsec,vy);
 
 
 
@@ -77,8 +81,8 @@ time_all = 0:0.001:(length(positionProfileX)-1)/1000;
 time_all = time_all';
 time_all = seconds(time_all);
 
-xInput = timetable(time_all,positionProfileX);
-yInput = timetable(time_all,positionProfileY);
+xvelinput = timetable(time_all,positionProfileX);
+yvelinput = timetable(time_all,positionProfileY);
 
 
 
