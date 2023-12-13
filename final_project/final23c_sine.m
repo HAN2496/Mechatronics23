@@ -33,7 +33,7 @@ a=accelTime;
 for idx=1:lenTimeVec
     t = timeVec(idx);
     if t <= a-a/10-log((5/a-targetVx+sqrt((targetVx-10/a)^2-targetVx^2))/targetVx)
-        xVec1(idx) = sineProfile(targetVx, accelTime, t, 0);
+        xVec1(idx) = sineProfile(targetVx, accelTime, t, 0, 0);
         yVec1(idx) = xVec1(idx) * targetVy/targetVx;
         tmp = xVec1(idx);
         tmp2 = idx;
@@ -42,7 +42,6 @@ for idx=1:lenTimeVec
         yVec1(idx) = xVec1(idx) * targetVy/targetVx;
     end
 end
-
 plot(xVec1, yVec1)
 
 %두 번째
@@ -69,15 +68,16 @@ tmp2 = 0;
 for idx=1:lenTimeVec
     t = timeVec(idx);
     if t <= a-a/10-log((5/a-targetVx+sqrt((targetVx-10/a)^2-targetVx^2))/targetVx)
-        xVec2(idx) =    sineProfile(targetVx, accelTime, t, x1);
-        yVec2(idx) = y1 + xVec2(idx) * targetVy/targetVx;
+        xVec2(idx) = x1 + sineProfile(targetVx, accelTime, t, x1, y1);
+        yVec2(idx) = y1 + (xVec2(idx)-x1) * targetVy/targetVx;
         tmp = xVec2(idx);
         tmp2 = idx;
     else
-        xVec2(idx) = x1 + tmp + targetX/lenTimeVec * (idx-tmp2);
-        yVec2(idx) = y1 + xVec2(idx) * targetVy/targetVx;
+        xVec2(idx) = tmp + targetX/lenTimeVec * (idx-tmp2);
+        yVec2(idx) = y1 + (xVec2(idx)-x1) * targetVy/targetVx;
     end
 end
+yVec2(1:10)
 
 hold on;
 plot(xVec2, yVec2)
