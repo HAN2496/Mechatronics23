@@ -22,13 +22,14 @@ vyVec = zeros(lenTimeVec, 1);
 tmp = 0;
 tmp2 = 0;
 for idx=1:lenTimeVec-1
+
     t = timeVec(idx);
     if t <= accelTime
         xVec(idx) = quinticProfile(targetVx, accelTime, t);
         yVec(idx) = xVec(idx) * targetVy/targetVx;
         tmp = xVec(idx);
         tmp2 = idx;
-    elseif t >= totalTime - accelTime
+    elseif t >= totalTime - accelTime +0.003
         xVec(idx) = - quinticProfile(targetVx, accelTime, totalTime - t) + targetX;
         yVec(idx) = xVec(idx) * targetVy/targetVx;
     else
