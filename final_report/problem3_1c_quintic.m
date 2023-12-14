@@ -37,10 +37,6 @@ for idx=1:lenTimeVec-1
         tmp = xVec(idx);
         tmp2 = idx;
     end
-    if (11000 <= idx) && (idx <= 11003)
-        xVec (idx)
-    end
-
 end
 xVec(lenTimeVec) = targetX;
 yVec(lenTimeVec) = targetY;
@@ -50,39 +46,37 @@ for idx = 2: lenTimeVec
     vyVec(idx) = (yVec(idx) - yVec(idx-1)) / timeStep;
 end
 
-t=find(timeVec==11);
-vxVec(t);
 
 timeVecSec = seconds(timeVec);
 xvelinput = timetable(timeVecSec, xVec);
 yvelinput = timetable(timeVecSec, yVec);
 
 subplot(3,2,[1 2])
-plot(xVec, yVec)
+plot(xVec, yVec, 'LineWidth', 4)
 title('Problem 3-1 Position (Quintic)');
 xlabel('X position (mm)');
 ylabel('Y position (mm)');
 
 subplot(3,2,3)
-plot(timeVec, xVec)
+plot(timeVec, xVec, 'LineWidth', 4)
 title('Problem 3-1 Position (t - x)');
 xlabel('t (sec)');
 ylabel('X position (mm)');
 
 subplot(3,2,4)
-plot(timeVec, vxVec)
-title('Problem 3-1 Velocity (Quintic)');
-xlabel('X position (mm)');
-ylabel('Y position (mm)');
+plot(timeVec, vxVec, 'LineWidth', 4)
+title('Problem 3-1 Velocity (t - v_x)');
+xlabel('t (sec)');
+ylabel('X velocity(mm/sec)');
 
 subplot(3, 2,5)
-plot(timeVec, yVec)
+plot(timeVec, yVec, 'LineWidth', 4)
 title('Problem 3-1 Position (t - y)');
-xlabel('time (sec)');
+xlabel('t (sec)');
 ylabel('Y position (mm)');
 
 subplot(3,2,6)
-plot(timeVec, vyVec)
-title('Problem 3-1 Velocity (Quintic)');
-xlabel('X position (mm)');
-ylabel('Y position (mm)');
+plot(timeVec, vyVec, 'LineWidth', 4)
+title('Problem 3-1 Velocity (t - v_y)');
+xlabel('t (sec)');
+ylabel('Y velocity (mm/sec)');

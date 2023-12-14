@@ -1,23 +1,32 @@
 clear;clc;
 timeStep = 0.001;
 
-divideDistance = 0.5 % 나누는 길이
+%단위시간(timeStep)동안 이동하는 거리
+divideDistance = 10
+
+%목표 x, y위치(targetX, targetY) 및 최종 이동거리(totalDist)
 targetX = 64;
 targetY = 48;
-tagetDist = sqrt(targetX.^2 + targetY.^2);
-totalTime = tagetDist / divideDistance * timeStep;
+targetDist = sqrt(targetX.^2 + targetY.^2);
 
-timeVec = (0:timeStep:totalTime)'; %시간 벡터
-lenTimeVec = length(timeVec)-1;
+%목표 위치까지 도달하는데 걸리는 시간
+totalTime = targetDist / divideDistance * timeStep;
 
-xVec = zeros(lenTimeVec+1, 1);
-yVec = zeros(lenTimeVec+1, 1);
+%timeStep단위로 증가하는 시간 프로파일(timeVec)
+timeVec = (0:timeStep:totalTime)'
+lenTimeVec = length(timeVec);
 
-for idx=1:lenTimeVec+1
-    xVec(idx) = targetX/lenTimeVec * (idx-1);
-    yVec(idx) = targetY/lenTimeVec * (idx-1);
+%x, y 프로파일 초기화
+xVec = zeros(lenTimeVec, 1);
+yVec = zeros(lenTimeVec, 1);
+
+%초기 위치를 제외하고 프로파일 업데이트
+for idx=2:lenTimeVec
+    xVec(idx) = targetX/targetDist * divideDistance * (idx-1);
+    yVec(idx) = targetY/targetDist * divideDistance * (idx-1);
 end
 
+%timetable 형태로 input
 timeVecSec = seconds(timeVec);
 xInput = timetable(timeVecSec, xVec);
 yInput = timetable(timeVecSec, yVec);
