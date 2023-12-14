@@ -5,7 +5,7 @@ timeStep = 0.001;
 t0 = 0.5;
 
 x1 = 20; y1= 10;
-x2 = 30; y2 = -10;
+x2 = -10; y2 = 0;
 targetV = 3;
 
 delX = x1;
@@ -54,13 +54,19 @@ path_len = pi*r;
 t0 = path_len/targetV;
 theta = atan((y0-y1)/(x0-x1));
 
+if x0>=x1           %회전방향
+    clockWise=1;        
+else
+    clockWise=-1;
+end
+
 t = (0:0.001:t0)';
 lenTimeVec = length(t);
 velocityProfile3=zeros(lenTimeVec ,2);
 
 for idx = 1:lenTimeVec
-    velocityProfile3(idx, 1) = x_r+ r * cos(theta - t(idx) * pi / t0);
-    velocityProfile3(idx, 2) = y_r+ r * sin(theta - t(idx) * pi / t0);
+    velocityProfile3(idx, 1) = x_r+ r * clockWise * cos(theta - t(idx) * pi / t0);
+    velocityProfile3(idx, 2) = y_r+ r * clockWise * sin(theta - t(idx) * pi / t0);
 end
 
 t = (0:0.001:t0+0.5)';

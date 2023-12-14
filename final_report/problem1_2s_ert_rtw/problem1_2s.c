@@ -7,9 +7,9 @@
  *
  * Code generation for model "problem1_2s".
  *
- * Model version              : 1.45
+ * Model version              : 1.46
  * Simulink Coder version : 9.5 (R2021a) 14-Nov-2020
- * C source code generated on : Mon Dec 11 18:39:46 2023
+ * C source code generated on : Thu Dec 14 22:14:33 2023
  *
  * Target selection: ert.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -541,14 +541,14 @@ void problem1_2s_initialize(void)
   rtsiSetSolverData(&problem1_2s_M->solverInfo, (void *)&problem1_2s_M->intgData);
   rtsiSetSolverName(&problem1_2s_M->solverInfo,"ode3");
   rtmSetTPtr(problem1_2s_M, &problem1_2s_M->Timing.tArray[0]);
-  rtmSetTFinal(problem1_2s_M, 10.0);
+  rtmSetTFinal(problem1_2s_M, -1);
   problem1_2s_M->Timing.stepSize0 = 0.001;
 
   /* External mode info */
-  problem1_2s_M->Sizes.checksums[0] = (3940761895U);
-  problem1_2s_M->Sizes.checksums[1] = (3059815510U);
-  problem1_2s_M->Sizes.checksums[2] = (3750357598U);
-  problem1_2s_M->Sizes.checksums[3] = (3934592599U);
+  problem1_2s_M->Sizes.checksums[0] = (2983932367U);
+  problem1_2s_M->Sizes.checksums[1] = (1250427754U);
+  problem1_2s_M->Sizes.checksums[2] = (3704669492U);
+  problem1_2s_M->Sizes.checksums[3] = (2701860128U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;

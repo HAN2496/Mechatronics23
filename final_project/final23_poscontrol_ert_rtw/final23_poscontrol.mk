@@ -2,7 +2,7 @@
 ## Makefile generated for component 'final23_poscontrol'. 
 ## 
 ## Makefile     : final23_poscontrol.mk
-## Generated on : Tue Dec 12 15:12:28 2023
+## Generated on : Thu Dec 14 22:25:46 2023
 ## Final product: $(RELATIVE_PATH_TO_ANCHOR)/final23_poscontrol.elf
 ## Product type : executable
 ## 
@@ -21,7 +21,7 @@ MAKEFILE                  = final23_poscontrol.mk
 MATLAB_ROOT               = $(MATLAB_WORKSPACE)/C/Program_Files/MATLAB/R2021a
 MATLAB_BIN                = $(MATLAB_WORKSPACE)/C/Program_Files/MATLAB/R2021a/bin
 MATLAB_ARCH_BIN           = $(MATLAB_BIN)/win64
-START_DIR                 = $(MATLAB_WORKSPACE)/C/CM_Projects/Mechatronics23/final_project
+START_DIR                 = $(MATLAB_WORKSPACE)/C/mecha/Mechatronics23/final_project
 SOLVER                    = 
 SOLVER_OBJ                = 
 CLASSIC_INTERFACE         = 0
@@ -362,6 +362,18 @@ $(PRODUCT) : $(OBJS) $(PREBUILT_OBJS) $(MAIN_OBJ)
 
 
 %.cpp.o : $(RELATIVE_PATH_TO_ANCHOR)/%.cpp
+	$(CPP) $(CPPFLAGS) -o "$@" "$<"
+
+
+%.c.o : $(MATLAB_WORKSPACE)/C/CM_Projects/Mechatronics23/final_project/%.c
+	$(CC) $(CFLAGS) -o "$@" "$<"
+
+
+%.s.o : $(MATLAB_WORKSPACE)/C/CM_Projects/Mechatronics23/final_project/%.s
+	$(AS) $(ASFLAGS) -o "$@" "$<"
+
+
+%.cpp.o : $(MATLAB_WORKSPACE)/C/CM_Projects/Mechatronics23/final_project/%.cpp
 	$(CPP) $(CPPFLAGS) -o "$@" "$<"
 
 

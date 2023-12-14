@@ -37,13 +37,13 @@ xvelinput = timetable(timeVecSec, xVec);
 yvelinput = timetable(timeVecSec, yVec);
 
 subplot(4,1,1)
-plot(timeVec, xVec)
+plot(timeVec, xpos)
 title('Problem 2-3');
 xlabel('time');
 ylabel('X position');
 
 subplot(4,1,2)
-plot(timeVec, yVec)
+plot(timeVec, ypos)
 xlabel('time');
 ylabel('Y position');
 
