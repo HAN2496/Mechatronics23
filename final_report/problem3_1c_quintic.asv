@@ -10,7 +10,7 @@ targetVy = targetV / sqrt(targetX.^2 + targetY.^2) * targetY;
 
 tagetDist = sqrt(targetX.^2 + targetY.^2);
 totalTime = tagetDist / targetV;
-decelTime = totalTime - accelTime
+de
 
 timeVec = (0:timeStep:totalTime)';
 lenTimeVec = length(timeVec);
@@ -22,7 +22,6 @@ vxVec = zeros(lenTimeVec, 1);
 vyVec = zeros(lenTimeVec, 1);
 tmp = 0;
 tmp2 = 0;
-check = 0;
 for idx=1:lenTimeVec-1
     t = timeVec(idx);
     if t <= accelTime
@@ -30,22 +29,11 @@ for idx=1:lenTimeVec-1
         yVec(idx) = xVec(idx) * targetVy/targetVx;
         tmp = xVec(idx);
         tmp2 = idx;
-    elseif t >= decelTime
+    elseif t >= totalTime - accelTime
         xVec(idx) = targetX- quinticProfile(targetVx, accelTime, totalTime - t);
-        if check == 1
-            xVec(idx)
-            check = 2;
-        elseif check == 2
-            xVec(idx)
-            check=3;
-        end
         yVec(idx) = xVec(idx) * targetVy/targetVx;
     else
         xVec(idx) = tmp + targetX/lenTimeVec * (idx-tmp2);
-        if check == 0
-            xVec(idx)
-            check=1;
-        end
         yVec(idx) = xVec(idx) * targetVy/targetVx;
         tmp = xVec(idx);
         tmp2 = idx;
