@@ -1,0 +1,55 @@
+time_step = 0.001;
+
+targetX = 20;
+targetY = 20;
+targetV = 5;
+
+xdata = xpos;
+ydata = ypos;
+xVec = xpos;
+yVec = ypos;
+len=length(xdata);
+timeData = 0.001:0.001:len/1000;
+
+tagetDist = sqrt(targetX.^2 + targetY.^2);
+
+errorVec = zeros(len, 1);
+vVec = zeros(len, 1);
+
+for idx=1:len
+
+    %오차 계산
+    slope = targetY/targetX;
+    dist = abs(slope * xdata(idx) - ydata(idx)) / sqrt(slope.^2+1);
+    errorVec(idx) = dist; 
+    % 속도 계산
+    for idx = 1:len-20
+        vVec(idx) = sqrt((xpos(idx+20)-xpos(idx)).^2+(ypos(idx+20)-ypos(idx)).^2)/0.02;
+    end
+
+end
+
+
+subplot(411)
+plot(timeData, xVec)
+title('X position');
+xlabel('X position (mm)');
+ylabel('Y position (mm)');
+
+subplot(412)
+plot(timeData, yVec)
+title('Y position)');
+xlabel('X position (mm)');
+ylabel('Y position (mm)');
+
+subplot(413)
+plot(timeData, errorVec)
+title('Problem 3-1 Position (Sine)');
+xlabel('X position (mm)');
+ylabel('Y position (mm)');
+
+subplot(414)
+plot(timeData, vVec)
+title('Problem 2-3');
+xlabel('X position');
+ylabel('Y position');

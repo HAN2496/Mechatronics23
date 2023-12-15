@@ -1,9 +1,9 @@
 clear;clc;
 timeStep = 0.001;
 
-accelTime = 5; % 가속구간 길이
-targetX = 64;
-targetY = 48;
+accelTime = 4; % 가속구간 길이
+targetX = 20;
+targetY = 20;
 targetV = 5;
 targetVx = targetV / sqrt(targetX.^2 + targetY.^2) * targetX;
 targetVy = targetV / sqrt(targetX.^2 + targetY.^2) * targetY;
@@ -30,6 +30,7 @@ for idx=1:lenTimeVec-1
         yVec(idx) = xVec(idx) * targetVy/targetVx;
         tmp = xVec(idx);
         tmp2 = idx;
+<<<<<<< Updated upstream
     elseif t >= decelTime
         xVec(idx) = targetX- quinticProfile(targetVx, accelTime, totalTime - t);
         if check == 1
@@ -40,6 +41,11 @@ for idx=1:lenTimeVec-1
             check=3;
         end
         yVec(idx) = xVec(idx) * targetVy/targetVx;
+=======
+%     elseif t >= totalTime - accelTime
+%         xVec(idx) = - quinticProfile(targetVx, accelTime, totalTime - t) + targetX;
+%         yVec(idx) = xVec(idx) * targetVy/targetVx;
+>>>>>>> Stashed changes
     else
         xVec(idx) = tmp + targetX/lenTimeVec * (idx-tmp2);
         if check == 0
@@ -54,11 +60,13 @@ end
 xVec(lenTimeVec) = targetX;
 yVec(lenTimeVec) = targetY;
 
-for idx = 2: lenTimeVec
+for idx = 2: lenTimeVec-1
     vxVec(idx) = (xVec(idx) - xVec(idx-1)) /  timeStep;
     vyVec(idx) = (yVec(idx) - yVec(idx-1)) / timeStep;
 end
 
+vxVec(end)=vxVec(end-1);
+vyVec(end)=vyVec(end-1);
 
 timeVecSec = seconds(timeVec);
 xvelinput = timetable(timeVecSec, xVec);
