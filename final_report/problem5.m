@@ -46,7 +46,7 @@ for idx = 2: lenTime
 end
 
 
-subplot(3,2,[1 2])
+%subplot(3,2,[1 2])
 plot([0, x1], [0, y1], color='blue')
 hold on;
 scatter(x1, y1, 100)
@@ -60,6 +60,7 @@ title('Problem 4 Position (x-y)');
 xlabel('X position (mm)');
 ylabel('Y position (mm)');
 
+%{
 subplot(3,2,3)
 
 plot(t, x, 'LineWidth', 4)
@@ -84,3 +85,4 @@ plot(t, vyVec, 'LineWidth', 4)
 title('Problem 4 Velocity (t - v_y)');
 xlabel('t (sec)');
 ylabel('Y velocity (mm/sec)');
+%}
